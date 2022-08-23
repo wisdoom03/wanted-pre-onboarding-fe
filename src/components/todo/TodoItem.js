@@ -1,56 +1,83 @@
-import styled from "@emotion/styled";
-import Input01 from "../commons/inputs/Input01";
 import Button02 from "../commons/buttons/Button02";
-import { Color } from "../../styles/Colors";
-import { useState } from "react";
-import Button01 from "../commons/buttons/Button01";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { todos } from "../../utils/ApiRoutes";
+import TodoWrite from "./TodoWrite";
+import * as S from "./Todo.styles";
 
 export default function TodoItem(props) {
+  const access_token = localStorage.getItem("accessToken");
   const [isEdit, setIsEdit] = useState(false);
+  const [input, setInput] = useState(props.el.todo);
+  const [isCompleted, setIsCompleted] = useState(props.el.isCompleted);
 
   const toggleEdit = () => {
-    setIsEdit(true);
+    setIsEdit((prev) => !prev);
+  };
+  const onClickDelete = async () => {
+    await axios
+      .delete(`${todos}/${props.el.id}`, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      })
+      .then((res) => {
+        if (res.status === 204) {
+          props.getTodos();
+        }
+      });
   };
 
+  const onClickUpdate = async () => {
+    await axios
+      .put(
+        `${todos}/${props.el.id}`,
+        { todo: input, isCompleted: isCompleted },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setIsEdit(false);
+          props.getTodos();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    onClickUpdate();
+  }, [isCompleted]);
+
   return (
-    <Form>
-      {isEdit && (
-        <>
-          <Input01 id="todo" />
-          <Button01 name="수정" />
-        </>
-      )}
-      {!isEdit && (
-        <>
-          <span>{String(props.el.isCompleted)}</span>
-          <div>{props.el.todo}</div>
+    <S.Form>
+      {isEdit ? (
+        <TodoWrite
+          type="text"
+          defaultValue={props.el.todo}
+          onChange={(event) => setInput(event.target.value)}
+          onClickUpdate={onClickUpdate}
+          isEdit={isEdit}
+          toggleEdit={toggleEdit}
+          isCompleted={isCompleted}
+          onClickCheck={() => setIsCompleted((prev) => !prev)}
+        />
+      ) : (
+        <S.Item>
+          <span
+            onClick={() => setIsCompleted((prev) => !prev)}
+            className={isCompleted ? "isCompleted" : ""}
+          />
+          <div className="content">{props.el.todo}</div>
           <Button02 name="수정" onClick={toggleEdit} />
-          <Button02 name="삭제" />
-        </>
+          <Button02 name="삭제" onClick={onClickDelete} />
+        </S.Item>
       )}
-    </Form>
+    </S.Form>
   );
 }
-
-const Form = styled.div`
-  display: flex;
-  div {
-    margin-right: 20px;
-    width: 100%;
-    /* border-radius: 8px; */
-    padding: 10px 15px;
-    border-bottom: 2px solid ${Color.GREEN_MAIN};
-    ::placeholder {
-      color: ${Color.GRAY_1};
-    }
-    :focus {
-      outline: none;
-    }
-  }
-  button {
-    width: 60px;
-  }
-  button:last-of-type {
-    margin-left: 8px;
-  }
-`;

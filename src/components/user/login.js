@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Input01 from "../commons/inputs/Input01";
 import Button01 from "../commons/buttons/Button01";
 import { UserValidation } from "./UserValidation";
@@ -9,9 +9,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-
   const [inputs, setInputs] = useState({ email: "", password: "" });
-  const [NewInputs, setNewInputs] = useState({ email: "", password: "" });
+  const [NewInputs, setNewInputs] = useState({ NewEmail: "", NewPassword: "" });
 
   const onChangeInput = (event) => {
     setInputs({
@@ -30,44 +29,34 @@ export default function LoginPage() {
   const onClickJoin = async () => {
     await axios
       .post(`${join}`, {
-        email: NewInputs.email,
-        password: NewInputs.password,
+        email: NewInputs.NewEmail,
+        password: NewInputs.NewPassword,
       })
       .then((res) => {
         alert("회원가입에 성공했습니다");
+        setNewInputs({ NewEmail: "", NewPassword: "" });
         navigate("/");
       });
   };
 
   const onClickLogin = async () => {
-    console.log(inputs);
-    // localStorage.setItem("aaa", "철수"); // 저장
-    // console.log(localStorage.getItem("aaa")); // 사용
     await axios
       .post(`${login}`, {
         email: inputs.email,
         password: inputs.password,
       })
       .then((res) => {
-        console.log(res);
         const accessToken = res.data.access_token;
         if (accessToken) {
           localStorage.setItem("accessToken", accessToken);
         }
-
-        console.log("======================");
-        console.log(localStorage.getItem("accessToken"));
-        console.log("======================");
-
-        //로그인 성공페이지로 이동하기
         alert("로그인에 성공했습니다");
-        // navigate("/todo");
+        navigate("/todo");
       });
   };
 
   useEffect(() => {
     if (localStorage.getItem("accessToken")) {
-      console.log(localStorage.getItem("accessToken"));
       navigate("/todo");
     }
   }, []);
@@ -80,12 +69,16 @@ export default function LoginPage() {
           <Input01
             placeholder="@를 포함한 email"
             id="email"
+            type="text"
             onChange={onChangeInput}
+            value={inputs.email}
           />
           <Input01
             placeholder="8자 이상의 password"
             id="password"
+            type="password"
             onChange={onChangeInput}
+            value={inputs.password}
           />
           <Button01
             onClick={onClickLogin}
@@ -99,18 +92,22 @@ export default function LoginPage() {
         <Form>
           <Input01
             placeholder="@를 포함한 email"
-            id="email"
+            type="text"
+            id="NewEmail"
             onChange={onChangeInput}
+            value={NewInputs.NewEmail}
           />
           <Input01
             placeholder="8자 이상의 password"
-            id="password"
+            type="password"
+            id="NewPassword"
             onChange={onChangeNewInput}
+            value={NewInputs.NewPassword}
           />
           <Button01
             onClick={onClickJoin}
             name="회원가입"
-            disabled={UserValidation(NewInputs.email, NewInputs.password)}
+            disabled={UserValidation(NewInputs.NewEmail, NewInputs.NewPassword)}
           />
         </Form>
       </section>

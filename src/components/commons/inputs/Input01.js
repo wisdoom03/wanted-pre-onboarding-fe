@@ -21,6 +21,8 @@ export default function Input01(props) {
       onChange={props.onChange}
       id={props.id}
       type={props.type}
+      value={props.value}
+      defaultValue={props.defaultValue}
     />
   );
 }
