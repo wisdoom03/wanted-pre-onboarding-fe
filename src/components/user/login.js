@@ -21,7 +21,7 @@ export default function LoginPage() {
 
   const onChangeNewInput = (event) => {
     setNewInputs({
-      ...inputs,
+      ...NewInputs,
       [event.target.id]: event.target.value,
     });
   };
@@ -32,7 +32,7 @@ export default function LoginPage() {
         email: NewInputs.NewEmail,
         password: NewInputs.NewPassword,
       })
-      .then((res) => {
+      .then(() => {
         alert("회원가입에 성공했습니다");
         setNewInputs({ NewEmail: "", NewPassword: "" });
         navigate("/");
@@ -59,6 +59,7 @@ export default function LoginPage() {
     if (localStorage.getItem("accessToken")) {
       navigate("/todo");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -94,15 +95,15 @@ export default function LoginPage() {
             placeholder="@를 포함한 email"
             type="text"
             id="NewEmail"
-            onChange={onChangeInput}
-            value={NewInputs.NewEmail}
+            onChange={onChangeNewInput}
+            value={NewInputs.NewEmail || ""}
           />
           <Input01
             placeholder="8자 이상의 password"
             type="password"
             id="NewPassword"
             onChange={onChangeNewInput}
-            value={NewInputs.NewPassword}
+            value={NewInputs.NewPassword || ""}
           />
           <Button01
             onClick={onClickJoin}

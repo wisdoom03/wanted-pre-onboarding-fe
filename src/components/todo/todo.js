@@ -20,6 +20,7 @@ export default function TodoPage() {
     if (localStorage.getItem("accessToken")) {
       getTodos();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getTodos = async () => {
