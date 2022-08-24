@@ -14,6 +14,7 @@ JavaScript, React, React-router-dom, Emotion, Axios
 $ npm install
 $ npm start
 ```
+    위 순서대로 실행하면 localhost:3000 포트에 서버가 실행됩니다.
 
 ### 3. Assignment Demo
 #### Assignment1, Assignment2 (로그인 / 회원가입)
