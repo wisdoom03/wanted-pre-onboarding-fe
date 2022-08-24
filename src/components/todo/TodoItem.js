@@ -25,6 +25,9 @@ export default function TodoItem(props) {
         if (res.status === 204) {
           props.getTodos();
         }
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -52,6 +55,7 @@ export default function TodoItem(props) {
 
   useEffect(() => {
     onClickUpdate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCompleted]);
 
   return (

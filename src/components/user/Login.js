@@ -52,6 +52,9 @@ export default function LoginPage() {
         }
         alert("로그인에 성공했습니다");
         navigate("/todo");
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 

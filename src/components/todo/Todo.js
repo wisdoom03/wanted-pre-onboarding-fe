@@ -14,7 +14,6 @@ export default function TodoPage() {
 
   useEffect(() => {
     if (!localStorage.getItem("accessToken")) {
-      console.log(localStorage.getItem("accessToken"));
       return navigate("/");
     }
     if (localStorage.getItem("accessToken")) {
@@ -32,6 +31,9 @@ export default function TodoPage() {
       })
       .then((res) => {
         setData(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -50,6 +52,9 @@ export default function TodoPage() {
         setData(res.data);
         getTodos();
         setInput("");
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
