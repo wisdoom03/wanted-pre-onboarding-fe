@@ -1,17 +1,23 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginPage from "./components/user/Login";
-import TodoPage from "./components/todo/Todo";
+import LoginPage from "./pages/home";
+import TodoPage from "./pages/todo";
 import { Global } from "@emotion/react";
 import { globalStyles } from "./styles/GlobalStyles";
+import Layout from "./components/commons/layout";
+import PrivateRoutes from "./utils/PrivateRoutes";
 
 function App() {
   return (
     <BrowserRouter>
       <Global styles={globalStyles} />
       <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/todo" element={<TodoPage />} />
-        <Route path="*" element={<div>404</div>} />
+        <Route element={<Layout />}>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="*" element={<div>404</div>} />
+          <Route element={<PrivateRoutes />}>
+            <Route path="/todo" element={<TodoPage />} />
+          </Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   );

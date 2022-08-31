@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { useState, useEffect } from "react";
-import Input01 from "../commons/inputs/Input01";
-import Button01 from "../commons/buttons/Button01";
-import { UserValidation } from "./UserValidation";
+import Input01 from "../../components/commons/inputs/Input01";
+import Button01 from "../../components/commons/buttons/Button01";
+import { UserValidation } from "../../utils/UserValidation";
 import axios from "axios";
 import { join, login } from "../../utils/ApiRoutes";
 import { useNavigate } from "react-router-dom";

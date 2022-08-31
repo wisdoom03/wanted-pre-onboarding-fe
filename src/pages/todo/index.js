@@ -1,24 +1,17 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import TodoItem from "./TodoItem";
 import { todos } from "../../utils/ApiRoutes";
 import axios from "axios";
-import TodoWrite from "./TodoWrite";
-import * as S from "./Todo.styles";
+import TodoWrite from "../../components/todo/TodoWrite";
+import TodoItem from "../../components/todo/TodoItem";
+import * as S from "../../components/todo/Todo.styles";
 
 export default function TodoPage() {
-  const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [input, setInput] = useState("");
   const access_token = localStorage.getItem("accessToken");
 
   useEffect(() => {
-    if (!localStorage.getItem("accessToken")) {
-      return navigate("/");
-    }
-    if (localStorage.getItem("accessToken")) {
-      getTodos();
-    }
+    getTodos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
